@@ -6,7 +6,9 @@ import {
   User,
   getStoredToken,
   setStoredToken,
+  setStoredRefreshToken,
   removeStoredToken,
+  removeStoredRefreshToken,
 } from "@/lib/api";
 
 interface AuthContextType {
@@ -45,14 +47,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await authApi.getProfile();
       if (res.success && res.data) {
         setUser(res.data);
-        setToken(existingToken);
+        setToken(getStoredToken());
       } else {
         removeStoredToken();
+        removeStoredRefreshToken();
         setUser(null);
         setToken(null);
       }
     } catch {
       removeStoredToken();
+      removeStoredRefreshToken();
       setUser(null);
       setToken(null);
     } finally {
@@ -66,8 +70,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const res = await authApi.login({ email, password });
-    if (res.success && res.data?.accessToken) {
+    if (res.success && res.data?.accessToken && res.data.refreshToken) {
       setStoredToken(res.data.accessToken);
+      setStoredRefreshToken(res.data.refreshToken);
       setToken(res.data.accessToken);
 
       // fetch profile immediately
@@ -91,12 +96,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     removeStoredToken();
+    removeStoredRefreshToken();
     setUser(null);
     setToken(null);
     window.location.href = "/login";
   };
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === "ADMIN";
 
   return (
     <AuthContext.Provider
