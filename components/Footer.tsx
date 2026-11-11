@@ -14,7 +14,6 @@ export function Footer() {
             <span className="font-semibold text-gray-900 text-sm">
               SecureNotes Platform
             </span>
-            <span className="text-gray-400 text-xs">| Technical Assessment Project</span>
           </div>
 
           <div className="flex items-center space-x-6 text-xs text-gray-500">
@@ -32,10 +31,6 @@ export function Footer() {
               Admin
             </Link>
           </div>
-
-          <p className="text-xs text-gray-400">
-            JWT Auth & MongoDB Mongoose Backend Integrated
-          </p>
         </div>
       </div>
     </footer>

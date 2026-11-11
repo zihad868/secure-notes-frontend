@@ -9,20 +9,17 @@ import { CreatePostModal } from "@/components/CreatePostModal";
 import {
   Globe,
   Lock,
-  FileText,
   User as UserIcon,
   Calendar,
   Plus,
   Search,
-  ArrowRight,
-  ShieldCheck,
   Zap,
   Sparkles,
   Loader2,
 } from "lucide-react";
 
 export default function HomePage() {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<PaginationMeta | undefined>();
   const [page, setPage] = useState(1);
@@ -64,77 +61,6 @@ export default function HomePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white p-8 sm:p-12 mb-12 shadow-2xl">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-violet-500/10 blur-3xl" />
-
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-indigo-200 text-xs font-semibold mb-6 border border-white/10">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            JWT Role-Based Access Control & MongoDB Aggregations
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-4">
-            Private Notes,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-violet-200 to-pink-300">
-              Public Knowledge.
-            </span>
-          </h1>
-
-          <p className="text-base sm:text-lg text-indigo-100/90 mb-8 leading-relaxed max-w-2xl">
-            Store private encrypted-ready personal notes, share insights with the community
-            through public posts, and manage roles seamlessly with the secure administrative dashboard.
-          </p>
-
-          <div className="flex flex-wrap gap-3.5">
-            {user ? (
-              <>
-                <Link
-                  href="/notes"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-indigo-900 font-bold hover:bg-indigo-50 shadow-lg shadow-indigo-950/20 transition"
-                >
-                  <FileText className="w-4 h-4" />
-                  My Private Notes
-                </Link>
-                <button
-                  onClick={() => setCreatePostOpen(true)}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 text-white font-semibold backdrop-blur-sm border border-indigo-400/30 transition"
-                >
-                  <Plus className="w-4 h-4" />
-                  Share Public Post
-                </button>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition shadow-md"
-                  >
-                    Admin Dashboard
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                )}
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/register"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-950/30 transition"
-                >
-                  Get Started Free
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/login"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium border border-white/10 backdrop-blur-md transition"
-                >
-                  Log In
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </section>
-
       {/* Public Posts Feed Section */}
       <section>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">

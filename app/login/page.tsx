@@ -126,37 +126,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Quick Demo Credentials Box */}
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-400 text-center mb-3">
-              Quick Test Credentials
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin("admin@example.com", "Admin12345")}
-                className="p-2.5 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 transition text-left"
-              >
-                <div className="flex items-center gap-1 font-bold">
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-                  Admin
-                </div>
-                <div className="text-[11px] text-amber-700 truncate">admin@example.com</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin("tester@test.com", "password123")}
-                className="p-2.5 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 transition text-left"
-              >
-                <div className="flex items-center gap-1 font-bold">
-                  <UserCheck className="w-3.5 h-3.5 text-indigo-600" />
-                  User
-                </div>
-                <div className="text-[11px] text-indigo-700 truncate">tester@test.com</div>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

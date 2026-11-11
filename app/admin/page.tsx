@@ -349,9 +349,6 @@ export default function AdminDashboardPage() {
               <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
                 Admin Control Center
               </h1>
-              <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                Full-access administrative controls for users, posts, notes, and MongoDB pipelines
-              </p>
             </div>
           </div>
         </div>
@@ -436,9 +433,6 @@ export default function AdminDashboardPage() {
           <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-gray-900">User Management Model</h2>
-              <p className="text-xs text-gray-500">
-                CRUD operations, role assignments, and aggregation pipeline lookups
-              </p>
             </div>
             <button
               onClick={() => handleOpenUserModal()}
@@ -715,16 +709,10 @@ export default function AdminDashboardPage() {
         <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden p-6">
           <div className="mb-6">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold font-mono">
-                MongoDB Aggregation Pipeline
-              </span>
               <h2 className="text-lg font-bold text-gray-900">
-                Scenario 1: Users Grouped by Interests
+                Users Grouped by Interests
               </h2>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Executed via single <code className="bg-gray-100 px-1 py-0.5 rounded text-indigo-600">collection.aggregate()</code> call using <code className="bg-gray-100 px-1 py-0.5 rounded">$unwind</code> and <code className="bg-gray-100 px-1 py-0.5 rounded">$group</code>
-            </p>
           </div>
 
           {interestsLoading ? (
