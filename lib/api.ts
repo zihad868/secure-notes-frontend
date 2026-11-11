@@ -1,6 +1,6 @@
 // Frontend API client helper
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://76.13.130.194:5000/api/v1";
 
 export interface PaginationMeta {
   page: number;
