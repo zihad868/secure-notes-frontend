@@ -133,7 +133,7 @@ export default function HomePage() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6">
             {filteredPosts.map((post) => {
               const author = typeof post.owner === "object" ? post.owner : null;
               const authorName = author?.name || (author?.email ? author.email.split("@")[0] : "Anonymous");
