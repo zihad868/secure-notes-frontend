@@ -138,7 +138,7 @@ export default function MyPostsPage() {
         </div>
 
         <p className="text-xs text-gray-500 hidden sm:block">
-          Total: <span className="font-semibold text-gray-900">{posts.length}</span> posts
+          Total: <span className="font-semibold text-gray-900">{meta?.total ?? posts.length}</span> posts
         </p>
       </div>
 

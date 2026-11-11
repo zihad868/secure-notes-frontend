@@ -66,6 +66,7 @@ export interface UserGroupedByInterest {
 
 export interface UserWithPosts extends User {
   posts: Post[];
+  total?: number;
 }
 
 export function getStoredToken(): string | null {

@@ -69,12 +69,17 @@ export default function AdminDashboardPage() {
 
   // Aggregation: Interests State
   const [interestsGroups, setInterestsGroups] = useState<UserGroupedByInterest[]>([]);
+  const [interestsMeta, setInterestsMeta] = useState<PaginationMeta | undefined>();
+  const [interestsPage, setInterestsPage] = useState(1);
   const [interestsLoading, setInterestsLoading] = useState(false);
 
   // User Post Lookup ($lookup aggregation) State
   const [selectedUserPosts, setSelectedUserPosts] = useState<UserWithPosts | null>(null);
   const [lookupLoading, setLookupLoading] = useState(false);
   const [userPostsModalOpen, setUserPostsModalOpen] = useState(false);
+  const [lookupUserId, setLookupUserId] = useState<string | null>(null);
+  const [lookupMeta, setLookupMeta] = useState<PaginationMeta | undefined>();
+  const [lookupPage, setLookupPage] = useState(1);
 
   // User CRUD Modals
   const [userModalOpen, setUserModalOpen] = useState(false);
@@ -145,13 +150,14 @@ export default function AdminDashboardPage() {
   }, []);
 
   // Fetch Interests Aggregation (Scenario 1)
-  const fetchInterestsAggregation = useCallback(async () => {
+  const fetchInterestsAggregation = useCallback(async (targetPage = 1) => {
     setInterestsLoading(true);
     setDashboardError(null);
     try {
-      const res = await usersApi.getGroupedByInterests(1, 50);
+      const res = await usersApi.getGroupedByInterests(targetPage, 10);
       if (res.data) {
         setInterestsGroups(res.data);
+        setInterestsMeta(res.meta);
       }
     } catch (err: unknown) {
       if (err instanceof Error) setDashboardError(err.message);
@@ -169,7 +175,7 @@ export default function AdminDashboardPage() {
         if (activeTab === "users") fetchUsers(usersPage);
         else if (activeTab === "posts") fetchAdminPosts(postsPage);
         else if (activeTab === "notes") fetchAdminNotes(notesPage);
-        else if (activeTab === "interests") fetchInterestsAggregation();
+        else if (activeTab === "interests") fetchInterestsAggregation(interestsPage);
       }
     }
   }, [
@@ -181,6 +187,7 @@ export default function AdminDashboardPage() {
     usersPage,
     postsPage,
     notesPage,
+    interestsPage,
     fetchUsers,
     fetchAdminPosts,
     fetchAdminNotes,
@@ -193,7 +200,7 @@ export default function AdminDashboardPage() {
     if (tab === "users") fetchUsers(usersPage);
     if (tab === "posts") fetchAdminPosts(postsPage);
     if (tab === "notes") fetchAdminNotes(notesPage);
-    if (tab === "interests") fetchInterestsAggregation();
+    if (tab === "interests") fetchInterestsAggregation(interestsPage);
   };
 
   // Open User Modal for Add / Edit
@@ -282,13 +289,16 @@ export default function AdminDashboardPage() {
   };
 
   // View User Posts Aggregation ($lookup)
-  const handleViewUserPosts = async (userId: string) => {
+  const handleViewUserPosts = async (userId: string, targetPage = 1) => {
     setLookupLoading(true);
     setUserPostsModalOpen(true);
+    setLookupUserId(userId);
+    setLookupPage(targetPage);
     try {
-      const res = await usersApi.getUserWithPosts(userId);
+      const res = await usersApi.getUserWithPosts(userId, targetPage, 10);
       if (res.data) {
         setSelectedUserPosts(res.data);
+        setLookupMeta(res.meta);
       }
     } catch (err: unknown) {
       if (err instanceof Error) alert(err.message);
@@ -365,7 +375,7 @@ export default function AdminDashboardPage() {
               if (activeTab === "users") fetchUsers(usersPage);
               if (activeTab === "posts") fetchAdminPosts(postsPage);
               if (activeTab === "notes") fetchAdminNotes(notesPage);
-              if (activeTab === "interests") fetchInterestsAggregation();
+              if (activeTab === "interests") fetchInterestsAggregation(interestsPage);
             }}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition shadow-sm"
           >
@@ -429,7 +439,7 @@ export default function AdminDashboardPage() {
           }`}
         >
           <Layers className="w-4 h-4" />
-          Interests Aggregation ({interestsGroups.length})
+          Interests ({interestsMeta?.total ?? interestsGroups.length})
         </button>
       </div>
 
@@ -780,6 +790,13 @@ export default function AdminDashboardPage() {
               ))}
             </div>
           )}
+
+          <Pagination
+            meta={interestsMeta}
+            currentPage={interestsPage}
+            onPageChange={setInterestsPage}
+            isLoading={interestsLoading}
+          />
         </section>
       )}
 
@@ -950,6 +967,9 @@ export default function AdminDashboardPage() {
         onClose={() => {
           setUserPostsModalOpen(false);
           setSelectedUserPosts(null);
+          setLookupUserId(null);
+          setLookupMeta(undefined);
+          setLookupPage(1);
         }}
         title="User Posts Pipeline ($lookup Aggregation)"
         maxWidth="xl"
@@ -1014,6 +1034,12 @@ export default function AdminDashboardPage() {
                 ))
               )}
             </div>
+            <Pagination
+              meta={lookupMeta}
+              currentPage={lookupPage}
+              onPageChange={(page) => lookupUserId && handleViewUserPosts(lookupUserId, page)}
+              isLoading={lookupLoading}
+            />
           </div>
         ) : (
           <div className="p-8 text-center text-gray-500 text-sm">No data available</div>

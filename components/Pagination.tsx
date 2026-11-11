@@ -19,8 +19,6 @@ export function Pagination({
 
   const totalPages = Math.max(1, Math.ceil(meta.total / meta.limit));
 
-  if (totalPages <= 1) return null;
-
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-xl mt-6">
       <div className="flex flex-1 justify-between sm:hidden">
