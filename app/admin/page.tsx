@@ -16,6 +16,7 @@ import {
   PaginationMeta,
 } from "@/lib/api";
 import { Modal } from "@/components/Modal";
+import { CreatePostModal } from "@/components/CreatePostModal";
 import { Pagination } from "@/components/Pagination";
 import {
   Shield,
@@ -58,6 +59,7 @@ export default function AdminDashboardPage() {
   const [postsMeta, setPostsMeta] = useState<PaginationMeta | undefined>();
   const [postsPage, setPostsPage] = useState(1);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   // Notes State
   const [notes, setNotes] = useState<Note[]>([]);
@@ -304,6 +306,10 @@ export default function AdminDashboardPage() {
     } catch (err: unknown) {
       if (err instanceof Error) alert(err.message);
     }
+  };
+
+  const handleAdminEditPost = (post: Post) => {
+    setEditingPost(post);
   };
 
   if (authLoading) {
@@ -610,13 +616,22 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => handleAdminDeletePost(post._id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      Delete Post
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => handleAdminEditPost(post)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                        Edit Post
+                      </button>
+                      <button
+                        onClick={() => handleAdminDeletePost(post._id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Delete Post
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -1004,6 +1019,17 @@ export default function AdminDashboardPage() {
           <div className="p-8 text-center text-gray-500 text-sm">No data available</div>
         )}
       </Modal>
+
+      <CreatePostModal
+        isOpen={Boolean(editingPost)}
+        onClose={() => setEditingPost(null)}
+        initialData={editingPost}
+        adminMode
+        onSuccess={() => {
+          setEditingPost(null);
+          fetchAdminPosts(postsPage);
+        }}
+      />
     </div>
   );
 }

@@ -10,6 +10,7 @@ interface CreatePostModalProps {
   onClose: () => void;
   onSuccess: (post: Post) => void;
   initialData?: Post | null;
+  adminMode?: boolean;
 }
 
 export function CreatePostModal({
@@ -17,6 +18,7 @@ export function CreatePostModal({
   onClose,
   onSuccess,
   initialData,
+  adminMode = false,
 }: CreatePostModalProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -49,7 +51,8 @@ export function CreatePostModal({
 
     try {
       if (initialData?._id) {
-        const res = await postsApi.updatePost(initialData._id, {
+        const update = adminMode ? postsApi.adminUpdatePost : postsApi.updatePost;
+        const res = await update(initialData._id, {
           title: title.trim(),
           content: content.trim(),
           isPublic,
@@ -76,7 +79,7 @@ export function CreatePostModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={initialData ? "Edit Post" : "Create New Post"}
+      title={initialData ? (adminMode ? "Admin Edit Post" : "Edit Post") : "Create New Post"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (

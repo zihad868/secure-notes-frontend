@@ -291,6 +291,16 @@ export const postsApi = {
     });
   },
 
+  adminUpdatePost: async (
+    id: string,
+    body: { title?: string; content?: string; isPublic?: boolean }
+  ) => {
+    return request<Post>(`/posts/admin/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  },
+
   deleteMyPost: async (id: string) => {
     return request<Post>(`/posts/${id}`, {
       method: "DELETE",
